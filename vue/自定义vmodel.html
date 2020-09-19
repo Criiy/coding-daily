@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+<div id="app">
+MODEL  Del!!!!Del~~~~~~~~eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
+MODEL  Del!!!!Del~~~~~~~~eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
+<c1 v-model="c1ModelDataDefaultForInput"></c1>
+
+<custom-input v-model="searchText"></custom-input>
+
+<c2 v-model="c2ModelDatatForCustom"></c2>
+</div>
+
+<script lang="javascript">
+
+  // vmodel默认是监听input事件，当然可以自己定义
+
+  // <input v-model="searchText"> 等价于，bind一个data，监听原声input事件的时候修改data
+  /*
+      <input
+        v-bind:value="searchText"
+        v-on:input="searchText = $event.target.value"
+      >
+  */
+  // 自定义组件要绑上v-model，默认就要监听model的事件（默认input）
+
+  // 方式1: 默认：子组件emit input事件
+  // 方式2：子组件配置model属性，监听任意事件如on-visible-change
+
+
+
+  var c1 = {
+    // 注意默认vmoal传入的参数是value
+    props: ['value'],
+    template: `<div @click="clickTest" style="height: 30px;weight: 100px; background: pink">{{value}}</div>`,
+    methods: {
+      clickTest() {
+        // 默认emit的是input事件
+        this.$emit('input', this.value + 1);
+      }
+    }
+  }
+
+  var c2 = {
+    // 修改默认的value成xxx
+    props: ['xxx'],
+    template: `<div @click="clickTest" style="height: 30px;weight: 100px; background: green">{{xxx}}</div>`,
+    model: {
+        // 修改默认的value成xxx
+        prop: 'xxx',
+        // 修改默认的事件为成on-visible-change
+        event: 'on-visible-change',
+    },
+    methods: {
+      clickTest() {
+        // 默认emit的是input事件
+        this.$emit('on-visible-change', this.xxx + 'o');
+      }
+    }
+  }
+
+
+  // 官网实例
+  Vue.component('custom-input', {
+  props: ['value'],
+  template: `
+    <input
+      v-bind:value="value"
+      v-on:input="$emit('input', $event.target.value)"
+    >
+  `
+})
+
+
+// new Vue要放在最后面
+  var app = new Vue({
+    el: '#app',
+    data() {
+      return {
+        c1ModelDataDefaultForInput: 1,
+        c2ModelDatatForCustom: 'a',
+        searchText: 'sdfdsf'
+      }
+    },
+    components: {
+      c1,c2
+    }
+})
+
+</script>
+</body>
+</html>

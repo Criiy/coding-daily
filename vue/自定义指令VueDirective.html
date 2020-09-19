@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+<div id="app">
+  <input v-focus />
+  传参：指令参数和绑定值，生命周期钩子函数中的binging可以拿到
+  <c1 v-xxx:canshu.a.b.c.d="songe" />
+  动态指令：绑的是变量，可以在binding的modifier中拿到
+  <c1 v-xxx[songe] />
+
+</div>
+
+<script lang="javascript">
+
+  var c1 = {
+    template: `<div>c1</div>`,
+  }
+
+  // 全局注册
+  Vue.directive('focus', {
+    // 这里是生命周期
+  // 当被绑定的元素插入到 DOM 中时
+  inserted: function (el) {
+    console.log('in v-focus')
+    // 聚焦元素
+    el.focus()
+  }
+})
+
+// new Vue要放在最后面
+  var app = new Vue({
+    el: '#app',
+    data() {
+      return {
+        songe: 123312
+      }
+    },
+    components: {
+      c1,
+    },
+    // 局部注册
+    directives: {
+    'xxx': {
+      // 这里是生命周期
+        inserted: function (el, binding) {
+          console.log('in c1 xxx')
+          console.log(binding)
+        }
+    }
+  }
+})
+
+</script>
+</body>
+</html>
