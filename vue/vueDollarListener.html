@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+<div id="app">
+  <demo1 
+    @chData1="changeData1" 
+    @chData2="changeData2" ></demo1>
+</div>
+
+<script lang="javascript">
+	console.log(Vue)
+
+	var demo2 = {
+    template: `
+      <div>
+        {{de2}}
+      </div>
+      `,
+      created() {
+      	console.log(this.$parent)
+      },
+   	  data() {
+   	  	return {
+   	  		de2: 'de2'
+   	  	}
+   	  },
+      methods: {
+      
+      }
+  }
+
+  var demo11 = {
+    template: `
+      <div>
+        传递二层：<p @click="$listeners.chdata2()">子组件</p> 
+        <div @click="aax">try?</div>
+        <demo2 />
+      </div>
+      `,
+      components:{
+      demo2,
+    },
+      created() {
+      	
+      },
+   	  data() {
+   	  	return {
+   	  		de11: 'de11'
+   	  	}
+   	  },
+      methods: {
+      	aax() {
+      		this.$parent.pData = 1234
+      		// this.$parent.changepData();
+      	}
+      }
+  }
+
+
+  var demo1 = {
+  	// 这里要用von透传
+    template: `
+      <div>
+        传递一层：<p @click="$emit('chdata1')">子组件</p>  <p @click="$listeners.chdata1()">子组件</p>  
+        <demo11 v-on="$listeners"></demo11>
+        <div>{{pData}}</div>
+      </div>
+    `,
+    data () {
+    	return {
+    		pData: 'pdata'
+    	}
+    },
+    components:{
+      demo11,
+      demo2,
+    },
+    mounted () {
+      console.log(this.$children)
+    },
+    methods: {
+    	changepData() {
+    		this.pData = 'pData changed'
+    	}
+    }
+  }
+
+  var app = new Vue({
+    el: '#app',
+    components:{
+      demo1
+    },
+    methods: {
+      changeData1: function() {
+        alert(1)
+      },
+      changeData2: function() {
+        alert(2)
+      }
+    }
+  })
+
+</script>
+</body>
+</html>

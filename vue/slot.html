@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+<div id="app">
+  <d1>
+    <template v-slot:s1>
+      <div style="color: red">d1slot</div>
+    </template>
+    <template v-slot:s2>
+      <div style="color: green">d1slot</div>
+    </template>
+  </d1>
+
+
+  <d2>
+<!-- 父组件<template>的v-slot:name，这个name对应具名slot的name
+     v-slot:name=“xxx” 这里的xxx对应 v-bind:xxx， v-bind:xxx后面的是子组件的数据 -->
+    <template v-slot:d2s1="fuck">
+      <div style="color: pink">687876786866
+      </div>
+      <h1>{{fuck}}</h1>
+    </template>
+  </d2>
+
+</div>
+
+<script lang="javascript">
+  // 2.6.0统一用v-slot语法，老的scope都被弃用了
+
+  var d1 = {
+    // 具名插槽
+    template: `
+      <div>{{d1.d1a}}
+        <slot name="s2"></slot>
+        <slot name="s1"></slot>
+      </div>
+      `,
+      data() {
+        return {
+          d1: {
+            d1a: 'd1a'
+          }
+        }
+      }
+  }
+
+  var d2 = {
+    // 插槽作用域
+    // <slot>的v-bind属性  对应  父组件<template>的v-slot
+    // 父组件<template>的v-slot:name，这个name对应具名slot的name
+    // v-slot:name=“xxx” 这里的xxx对应 v-bind:xxx， v-bind:xxx后面的是子组件的数据
+    template: `
+      <div>
+        <slot name="d2s1" v-bind:xxx="d2">
+          {{d2}}
+        </slot>
+      </div>
+      `,
+      data() {
+        return {
+          d2: {
+            d2a: 'd2a'
+          },
+          user: 'users'
+        }
+      }
+  }
+
+  var app = new Vue({
+    el: '#app',
+    components:{
+      d1, d2
+    },
+  })
+
+</script>
+</body>
+</html>
